@@ -37,13 +37,15 @@ export async function deleteContactById(id) {
   return result;
 }
 
-export const updateContactById = async (id, { name, email, phone }) => {
+export const updateContactById = async (id, body) => {
+  // export const updateContactById = async (id, { name, email, phone }) => {
   const contacts = await getAllContacts();
   const index = contacts.findIndex((contact) => contact.id === id);
   if (index === -1) {
     return null;
   }
-  contacts[index] = { id, name, email, phone };
+  contacts[index] = { ...contacts[index], ...body };
+  // contacts[index] = { id, name, email, phone };
   await updateContacts(contacts);
   return contacts[index];
 };

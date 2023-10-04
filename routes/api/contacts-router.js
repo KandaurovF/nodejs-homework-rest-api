@@ -4,11 +4,15 @@ import contactsController from "../../controllers/contacts-controller.js";
 
 import { isEmptyBody } from "../../middlewares/index.js";
 
-import { validateBody } from "../../decorators/index.js";
+import { validateBody, validateUpdateBody } from "../../decorators/index.js";
 
-import { contactAddSchema } from "../../schemas/contact-schemas.js";
+import {
+  contactAddSchema,
+  contactUpdateSchema,
+} from "../../schemas/contact-schemas.js";
 
 const contactAddValidate = validateBody(contactAddSchema);
+const contactUpdateValidate = validateUpdateBody(contactUpdateSchema);
 
 const contactsRouter = express.Router();
 
@@ -26,7 +30,7 @@ contactsRouter.post(
 contactsRouter.put(
   "/:id",
   isEmptyBody,
-  contactAddValidate,
+  contactUpdateValidate,
   contactsController.updateById
 );
 

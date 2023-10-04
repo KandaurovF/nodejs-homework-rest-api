@@ -11,3 +11,9 @@ export const contactAddSchema = Joi.object({
     "any.required": `"phone" is a required field`,
   }),
 });
+
+export const contactUpdateSchema = Joi.object({
+  name: Joi.string(),
+  email: Joi.string(),
+  phone: Joi.string(),
+});
