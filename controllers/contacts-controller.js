@@ -1,17 +1,19 @@
-import * as contactsService from "../models/contacts/index.js";
+import Conntact from "../models/Contact.js";
 
 import { HttpError } from "../helpers/index.js";
 
 import { ctrlWrapper } from "../decorators/index.js";
+import Contact from "../models/Contact.js";
 
 const getAll = async (req, res) => {
-  const result = await contactsService.getAllContacts();
+  const result = await Conntact.find();
   res.json(result);
 };
 
 const getById = async (req, res) => {
   const { id } = req.params;
-  const result = await contactsService.getContactById(id);
+  // const result = await Conntact.findOne({ _id: id });
+  const result = await Conntact.findById(id);
   if (!result) {
     throw HttpError(404, `Conntact with ${id} not found`);
   }
@@ -19,14 +21,25 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const result = await contactsService.addContact(req.body);
+  const result = await Contact.create(req.body);
   res.status(201).json(result);
 };
 
 const updateById = async (req, res) => {
   const { id } = req.params;
 
-  const result = await contactsService.updateContactById(id, req.body);
+  const result = await Conntact.findByIdAndUpdate(id, req.body);
+  if (!result) {
+    throw HttpError(404, `Contact with ${id} not found`);
+  }
+
+  res.json(result);
+};
+
+const updateFavorite = async (req, res) => {
+  const { id } = req.params;
+
+  const result = await Conntact.findByIdAndUpdate(id, req.body);
   if (!result) {
     throw HttpError(404, `Contact with ${id} not found`);
   }
@@ -36,7 +49,7 @@ const updateById = async (req, res) => {
 
 const deleteById = async (req, res) => {
   const { id } = req.params;
-  const result = await contactsService.deleteContactById(id);
+  const result = await Contact.findByIdAndDelete(id);
   if (!result) {
     throw HttpError(404, `Contact with ${id} not found`);
   }
@@ -51,5 +64,6 @@ export default {
   getById: ctrlWrapper(getById),
   add: ctrlWrapper(add),
   updateById: ctrlWrapper(updateById),
+  updateFavorite: ctrlWrapper(updateFavorite),
   deleteById: ctrlWrapper(deleteById),
 };
