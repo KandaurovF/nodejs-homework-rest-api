@@ -6,6 +6,7 @@ import {
   userSignupSchema,
   userSigninSchema,
   userUpdateSubscriptionSchema,
+  userEmailSchema,
 } from "../../models/User.js";
 
 const userSignupValidate = validateBody(userSignupSchema);
@@ -13,6 +14,7 @@ const userSigninValidate = validateBody(userSigninSchema);
 const userUpdateSubscriptionValidate = validateBody(
   userUpdateSubscriptionSchema
 );
+const userEmailValidate = validateBody(userEmailSchema);
 
 const authRouter = express.Router();
 
@@ -22,6 +24,15 @@ authRouter.post(
   isEmptyBody,
   userSignupValidate,
   authController.signup
+);
+
+authRouter.get("/verify/:verificationCode", authController.verify);
+
+authRouter.post(
+  "/verify",
+  isEmptyBody,
+  userEmailValidate,
+  authController.resendVerifyEmail
 );
 
 authRouter.post(
